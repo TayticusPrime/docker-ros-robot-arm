@@ -5,7 +5,7 @@ ROS2 Study in Docker Environment - Simply Robot Arm
 
 [https://vcxsrv.com/](https://vcxsrv.com/)
 
-**Windows Powershell**
+Link: **Windows Powershell**
 ```powershell
 Start-Process "C:\Program Files\VcXsrv\vcxsrv.exe" -ArgumentList ":0 -multiwindow -clipboard -ac"
 ```
