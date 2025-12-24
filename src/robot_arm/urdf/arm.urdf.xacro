@@ -1,47 +1,51 @@
 <?xml version="1.0"?>
 <robot name="six_dof_arm" xmlns:xacro="http://www.ros.org/wiki/xacro">
 
-  <xacro:property name="link_size" value="0.05"/>
+  <!-- Dimensions -->
+  <xacro:property name="link_radius" value="0.03"/>
+  <xacro:property name="link_length" value="0.25"/>
 
   <!-- Base Link -->
   <link name="base_link">
     <visual>
       <geometry>
-        <box size="0.1 0.1 0.05"/>
+        <box size="0.15 0.15 0.05"/>
       </geometry>
-      <material name="dark-gray">
+      <material name="dark_gray">
         <color rgba="0.2 0.2 0.2 1"/>
       </material>
     </visual>
   </link>
 
-  <!-- Define 6 rotational joints -->
-  <xacro:macro name="arm_joint" params="parent child xyz rpy">
+  <!-- Revolute joint + link -->
+  <xacro:macro name="arm_joint" params="parent child xyz rpy axis">
     <link name="${child}">
       <visual>
+        <origin xyz="0 0 ${link_length/2}" rpy="0 0 0"/>
         <geometry>
-          <cylinder radius="${link_size}" length="0.2"/>
+          <cylinder radius="${link_radius}" length="${link_length}"/>
         </geometry>
-        <material name="gray">
-          <color rgba="0.5 0.5 0.5 1"/>
+        <material name="light_gray">
+          <color rgba="0.6 0.6 0.6 1"/>
         </material>
       </visual>
     </link>
+
     <joint name="${parent}_to_${child}" type="revolute">
       <parent link="${parent}"/>
       <child link="${child}"/>
       <origin xyz="${xyz}" rpy="${rpy}"/>
-      <axis xyz="0 0 1"/>
+      <axis xyz="${axis}"/>
       <limit lower="-3.14" upper="3.14" effort="10" velocity="1"/>
     </joint>
   </xacro:macro>
 
-  <!-- Create 6 joints -->
-  <xacro:arm_joint parent="base_link" child="link_1" xyz="0 0 0.05" rpy="0 0 0"/>
-  <xacro:arm_joint parent="link_1" child="link_2" xyz="0 0 0.2" rpy="0 0 0"/>
-  <xacro:arm_joint parent="link_2" child="link_3" xyz="0 0 0.2" rpy="0 0 0"/>
-  <xacro:arm_joint parent="link_3" child="link_4" xyz="0 0 0.2" rpy="0 0 0"/>
-  <xacro:arm_joint parent="link_4" child="link_5" xyz="0 0 0.15" rpy="0 0 0"/>
-  <xacro:arm_joint parent="link_5" child="link_6" xyz="0 0 0.1" rpy="0 0 0"/>
+  <!-- 6-DOF chain -->
+  <xacro:arm_joint parent="base_link" child="link_1" xyz="0 0 0.05" rpy="0 0 0" axis="0 0 1"/>
+  <xacro:arm_joint parent="link_1" child="link_2" xyz="0 0 ${link_length}" rpy="0 0 0" axis="0 1 0"/>
+  <xacro:arm_joint parent="link_2" child="link_3" xyz="0 0 ${link_length}" rpy="0 0 0" axis="0 1 0"/>
+  <xacro:arm_joint parent="link_3" child="link_4" xyz="0 0 ${link_length}" rpy="0 0 0" axis="0 0 1"/>
+  <xacro:arm_joint parent="link_4" child="link_5" xyz="0 0 ${link_length}" rpy="0 0 0" axis="0 1 0"/>
+  <xacro:arm_joint parent="link_5" child="link_6" xyz="0 0 ${link_length}" rpy="0 0 0" axis="0 0 1"/>
 
 </robot>
